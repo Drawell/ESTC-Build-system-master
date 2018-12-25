@@ -72,21 +72,12 @@ void init_tim2(void)
     NVIC_Init(&nvic_struct);
 }
 
-
-const uint16_t arr_of_colours[6]  = {GPIO_Pin_8, GPIO_Pin_8 | GPIO_Pin_9, GPIO_Pin_9,
-                GPIO_Pin_9 | GPIO_Pin_10, GPIO_Pin_10, GPIO_Pin_8 | GPIO_Pin_10};
-
-uint8_t size = 6;
-uint8_t direction = 1;
-uint8_t current_colour = 0;
 void switch_LED(){
     GPIO_SetBits(GPIOA, arr_of_colours[current_colour]);
     current_colour = (current_colour + 1 + (size - 2) * direction) % size;
     GPIO_ResetBits(GPIOA, arr_of_colours[current_colour]);
 }
 
-uint8_t speed = 0;
-uint8_t iteration = 0;
 void TIM2_IRQHandler (void)
 {
     if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET) {

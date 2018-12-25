@@ -39,9 +39,6 @@ void init_tim2(void)
     TIM_Cmd(TIM2, ENABLE);
 }
 
-uint8_t button_pushed = 0;
-uint8_t direction = 1;
-
 void wait_for_tim2(void)
 {
     uint8_t i_dont_know_but_it_dont_work_without_this_line = 1;

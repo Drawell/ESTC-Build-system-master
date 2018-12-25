@@ -2,6 +2,10 @@
 
 #define SWITCH_DELAY 400000
 
+/*!
+    \brief Init LEDs
+    Init GPIOD Pins 12, 13, 14, 15 with Out mode
+ */
 void init_leds(void)
 {
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
@@ -15,6 +19,10 @@ void init_leds(void)
     GPIO_Init(GPIOD, &GPIO_InitStructure);            
 }
 
+/*!
+    \brief Init button
+    Init GPIOA Pin 0 with in mode
+ */
 void init_button(void)
 {
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
@@ -27,9 +35,12 @@ void init_button(void)
   GPIO_Init(GPIOD, &GPIO_InitStructure); 
 }
 
-uint8_t button_pushed = 0;
-uint8_t direction = 1;
-
+/*!
+    \brief wait for some time
+    Wait for some time.
+    Set button_pushed variable is 1 when button pressed.
+    Change direction when button released    
+*/
 void delay(uint32_t delay_ticks){
     for (uint32_t i = 0; i < delay_ticks; i++){
         if (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0) != RESET){
@@ -39,11 +50,16 @@ void delay(uint32_t delay_ticks){
             button_pushed = 0;
             direction = !direction;
             for (uint16_t j = 0; j < 20000; j++);
-            return; 
+            return;
         }
     }
 }
 
+
+/*!
+    \brief switch lit led
+    Off lit led, on next led and call delay function
+*/
 int main(void)
 {
     init_leds();
