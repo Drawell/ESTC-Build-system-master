@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['change_5fintensity',['change_intensity',['../main_8h.html#ae53475ef213445fe7ac4f6a684f0fcae',1,'main.c']]],
+  ['change_5fintensity',['change_intensity',['../main_8h.html#ae53475ef213445fe7ac4f6a684f0fcae',1,'main.h']]],
   ['colour_5fblue_5fintensity',['colour_blue_intensity',['../main_8h.html#a8f16ac2d5d47685aa146a9ccc14b000d',1,'main.h']]],
   ['colour_5fgreen_5fintensity',['colour_green_intensity',['../main_8h.html#ac5ce323a02da0a9a5affcead95878677',1,'main.h']]],
   ['colour_5fred_5fintensity',['colour_red_intensity',['../main_8h.html#a227a0af69cc93faae4fc383f1c5f3350',1,'main.h']]],

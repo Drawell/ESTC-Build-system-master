@@ -23,7 +23,7 @@ void init_small_leds(void)
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
     // 12 - red; 13 - green; 14 - blue;
     GPIO_InitTypeDef GPIO_InitStructure;
-    GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14;
+    GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
     GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_OUT;
     GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
@@ -107,6 +107,25 @@ void init_tim1()
     TIM_Cmd(TIM1, ENABLE);
 }
 
+void init_tim2(void)
+{
+    TIM_TimeBaseInitTypeDef tim_struct;
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,ENABLE);
+    tim_struct.TIM_Period = 100 - 1;
+    tim_struct.TIM_Prescaler = 42000 - 1;
+    tim_struct.TIM_ClockDivision = 0;
+    tim_struct.TIM_CounterMode = TIM_CounterMode_Up;
+    TIM_TimeBaseInit(TIM2, &tim_struct);
+    TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);    
+
+    NVIC_InitTypeDef nvic_struct;
+    nvic_struct.NVIC_IRQChannel = TIM2_IRQn;
+    nvic_struct.NVIC_IRQChannelPreemptionPriority = 0;
+    nvic_struct.NVIC_IRQChannelSubPriority = 1;
+    nvic_struct.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&nvic_struct);
+}
+
 void change_intensity(void)
 {
     // 1-red ; 2-green; 3-blue
@@ -114,15 +133,15 @@ void change_intensity(void)
     uint32_t k = 1000 / (bright_count - 1);
 
     switch (current_colour){
-    case 1:
+    case 0:
         colour_red_intensity = (colour_red_intensity + 1) % bright_count;
         TIM_SetCompare1(TIM1, colour_red_intensity  * k);
         break;
-    case 2:
+    case 1:
         colour_green_intensity = (colour_green_intensity + 1) % bright_count;
         TIM_SetCompare2(TIM1, colour_green_intensity  * k);
         break;
-    case 3:
+    case 2:
         colour_blue_intensity = (colour_blue_intensity + 1) % bright_count;
         TIM_SetCompare3(TIM1, colour_blue_intensity  * k);
         break;
@@ -131,25 +150,37 @@ void change_intensity(void)
     }
 }
 
+void TIM2_IRQHandler (void)
+{
+    if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET) {
+        mask_flag = 1;
+        TIM_Cmd(TIM2, DISABLE); 
+        TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
+    }
+}
 
 void EXTI0_IRQHandler(void) {
     if (EXTI_GetITStatus(EXTI_Line0)!= RESET) {
+        if (mask_flag){
+            const uint16_t arr_of_leds[3] = {GPIO_Pin_14, GPIO_Pin_12, GPIO_Pin_15};        
+            GPIO_ResetBits(GPIOD, arr_of_leds[current_colour]);
+            current_colour = (current_colour + 1) % 3;
+            GPIO_SetBits(GPIOD, arr_of_leds[current_colour]);
 
-        const uint16_t arr_of_leds[3] = {GPIO_Pin_12, GPIO_Pin_13, GPIO_Pin_14};        
-        GPIO_ResetBits(GPIOD, arr_of_leds[current_colour]);
-        current_colour = (current_colour + 1) % 3;
-        GPIO_SetBits(GPIOD, arr_of_leds[current_colour);
-
-        NVIC_DisableIRQ(EXTI0_IRQn);
-        for(int i = 0; i < 10000; i++);
-        NVIC_EnableIRQ(EXTI0_IRQn);
-        EXTI_ClearITPendingBit(EXTI_Line0);
+            mask_flag = 0;
+            TIM_Cmd(TIM2, ENABLE);
+        }        
+        EXTI_ClearITPendingBit(EXTI_Line0);        
     }
 }
 
 void EXTI1_IRQHandler(void){
     if (EXTI_GetITStatus(EXTI_Line1) != RESET) {
-        change_intensity();        
+        if (mask_flag){
+            change_intensity();
+            mask_flag = 1;
+            TIM_Cmd(TIM2, ENABLE);
+        }
         EXTI_ClearITPendingBit(EXTI_Line1);
     }
 }
@@ -161,8 +192,9 @@ int main(void)
     init_button();
     init_external_interrupt();    
     init_tim1();
+    init_tim2();
 
-    GPIO_SetBits(GPIOD, GPIO_Pin_12);
+    GPIO_SetBits(GPIOD, GPIO_Pin_14);
     
     while (1)
     {

@@ -44,14 +44,23 @@ void init_external_interrupt(void);
  */
 void init_tim1();
 
+/*!
+    \brief Init timer tim2
+    Init tim2 for mask interrupt for 100 ms.
+*/
+void init_tim2(void);
+
+/// Mask interrupt flag; 0 - mask, 1 - allow interrupt.
+uint8_t mask_flag = 1;
+
 /// Configured colour; 1 - red, 2 - green, 3 - blue.
-uint8_t current_colour = 1;
+uint8_t current_colour = 0;
 /// Present intensity of red.
-uint8_t colour_red_intensity = 1;
+uint8_t colour_red_intensity = 0;
 /// Present intensity of green.
-uint8_t colour_green_intensity = 1;
+uint8_t colour_green_intensity = 0;
 /// Present intensity of blue.
-uint8_t colour_blue_intensity = 1;
+uint8_t colour_blue_intensity = 0;
 
 /*!
     \brief Init external interrupt for buttons 
@@ -60,6 +69,12 @@ uint8_t colour_blue_intensity = 1;
     On EXTI_Line1 - GPIOE Pin 1.
  */
 void change_intensity(void);
+
+/*!
+    \brief tim2 interrupt handler.
+    set mask interrupt flag as 1;
+ */
+void TIM2_IRQHandler (void);
 
 /*!
     \brief Button 0 interrupt handler.

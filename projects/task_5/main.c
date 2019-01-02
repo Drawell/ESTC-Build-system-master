@@ -11,7 +11,8 @@ void init_Buttons() {
     GPIO_Init(GPIOE, &GPIO_InitStructure);
 }
 
-void init_external_iterrupt() {    
+void init_external_iterrupt()
+{    
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
     SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOE, EXTI_PinSource0);
     
@@ -37,47 +38,79 @@ void init_external_iterrupt() {
     NVIC_Init(&NVIC_InitStruct);
 }
 
+void init_tim2(void)
+{
+    TIM_TimeBaseInitTypeDef tim_struct;
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2,ENABLE);
+    tim_struct.TIM_Period = 100 - 1;
+    tim_struct.TIM_Prescaler = 42000 - 1;
+    tim_struct.TIM_ClockDivision = 0;
+    tim_struct.TIM_CounterMode = TIM_CounterMode_Up;
+    TIM_TimeBaseInit(TIM2, &tim_struct);
+    TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);    
+
+    NVIC_InitTypeDef nvic_struct;
+    nvic_struct.NVIC_IRQChannel = TIM2_IRQn;
+    nvic_struct.NVIC_IRQChannelPreemptionPriority = 0;
+    nvic_struct.NVIC_IRQChannelSubPriority = 1;
+    nvic_struct.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&nvic_struct);
+}
+
 void change_intensity(void)
 {
     // 1-red ; 2-green; 3-blue
-    uint8_t bright_count = 11;
-    uint32_t k = 1000 / (bright_count - 1);
+    uint8_t bright_count = 5;
+    uint8_t k = 255 / bright_count;
 
     switch (current_colour){
-    case 1:
+    case 0:
         colour_red_intensity = (colour_red_intensity + 1) % bright_count;
         break;
-    case 2:
+    case 1:
         colour_green_intensity = (colour_green_intensity + 1) % bright_count;
         break;
-    case 3:
+    case 2:
         colour_blue_intensity = (colour_blue_intensity + 1) % bright_count;
         break;
     default:
         break;
     }
 
-    ml_set_color(23 * colour_red_intensity, 23 * colour_green_intensity, 23 * colour_blue_intensity);   
+    ml_set_color(k * colour_red_intensity, k * colour_green_intensity, k * colour_blue_intensity);   
 }
 
+void TIM2_IRQHandler (void)
+{
+    if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET) {
+        mask_flag = 1;
+        TIM_Cmd(TIM2, DISABLE); 
+        TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
+    }
+}
 
 void EXTI0_IRQHandler(void) {
     if (EXTI_GetITStatus(EXTI_Line0)!= RESET) {
-        
-        ml_turn_off_LED(current_colour);
-        current_colour = (current_colour + 1) % 3;
-        ml_turn_on_LED(current_colour);
+        if (mask_flag){
+            ml_turn_off_LED(current_colour);
+            current_colour = (current_colour + 1) % 3;
+            ml_turn_on_LED(current_colour);
 
-        NVIC_DisableIRQ(EXTI0_IRQn);
-        for(int i = 0; i < 10000; i++);
-        NVIC_EnableIRQ(EXTI0_IRQn);
+            mask_flag = 0;
+            TIM_Cmd(TIM2, ENABLE);
+        }
         EXTI_ClearITPendingBit(EXTI_Line0);
     }
 }
 
 void EXTI1_IRQHandler(void){
     if (EXTI_GetITStatus(EXTI_Line1) != RESET) {
-        change_intensity();        
+        if (mask_flag){
+            change_intensity();
+
+            mask_flag = 0;
+            TIM_Cmd(TIM2, ENABLE);            
+        }
         EXTI_ClearITPendingBit(EXTI_Line1);
     }
 }
@@ -86,9 +119,11 @@ int main(void)
 {
     init_Buttons();
     init_external_iterrupt();
+    init_tim2();
     ml_init();
-    ml_turn_off_LED(current_colour);
-    
+    ml_turn_on_LED(current_colour);
+
+    ml_set_color(0,0,0);
     while (1)
     {
     }

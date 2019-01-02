@@ -26,7 +26,6 @@ INCLUDE_DIRS += -I$(BUILD_ROOT)/stm_spl/CMSIS/ST/inc
 INCLUDE_DIRS += -I$(BUILD_ROOT)/stm_spl/CMSIS/ST/inc
 INCLUDE_DIRS += -I$(BUILD_ROOT)/stm_spl/STM32F4xx/inc
 INCLUDE_DIRS += -I$(BUILD_ROOT)/common/include
-INCLUDE_DIRS += -I$(BUILD_ROOT)/projects/lib_test/src
 
 ###############################################################################
 #                                  C Defines                                  #
@@ -50,7 +49,7 @@ LD_SCRIPT  = $(BUILD_ROOT)/common/ld/stm32f4xx_flash.ld
 LIB_DIRS  += $(BUILD_ROOT)/common/ld
 LIB_DIRS  += $(BUILD_ROOT)/stm_spl/
 LIB_DIRS  += $(BUILD_ROOT)/common/
-LIB_DIRS  += $(BUILD_ROOT)/projects/lib_test
+
 
 LDFLAGS += $(addprefix -L, $(LIB_DIRS))
 
@@ -69,7 +68,6 @@ endif
 LDLIBS += -Wl,--start-group -lc -lgcc -lnosys -Wl,--end-group
 LDLIBS += -lstmcommon
 LDLIBS += -lstm_spl
-LDLIBS += -lstmled
 
 STARTUP_S      = $(BUILD_ROOT)/common/as/startup_stm32f40_41xxx.S
 STARTUP        = ${STARTUP_S:.S=.o}

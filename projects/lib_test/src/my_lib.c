@@ -41,7 +41,7 @@ void __ml_init_tim1__(void){
     OC_struct.TIM_Pulse = 0;
     TIM_OC2PreloadConfig(TIM1, TIM_OCPreload_Enable);
     TIM_OC2Init(TIM1, &OC_struct);
-
+    
     OC_struct.TIM_Pulse = 0;
     TIM_OC3PreloadConfig(TIM1, TIM_OCPreload_Enable);
     TIM_OC3Init(TIM1, &OC_struct);
@@ -75,7 +75,6 @@ void ml_init(void){
     __ml_init_tim1__();
     __ml_inint_small_LEDs__();
     inited = 1;
-    return 1;
 }
 
 void ml_set_color(uint8_t red, uint8_t green, uint8_t blue){
@@ -87,7 +86,7 @@ void ml_set_color(uint8_t red, uint8_t green, uint8_t blue){
     TIM_SetCompare3(TIM1, (blue * 39)/10);
 }
 
-uint16_t* array_of_small_LEDs_pins[] = {GPIO_Pin_12, GPIO_Pin_13, GPIO_Pin_14, GPIO_Pin_15};
+uint16_t* array_of_small_LEDs_pins[] = {GPIO_Pin_14, GPIO_Pin_12, GPIO_Pin_15, GPIO_Pin_13};
 
 void ml_turn_on_LED(uint8_t num){
     if (!inited)

@@ -27,13 +27,13 @@ void ml_set_color(uint8_t red, uint8_t green, uint8_t blue);
 
 /*!
     \brief Turn ON small led by number
-    \param[in] num Number of led. 1 - red, 2 - green, 3 - blue, 4 - orange.
+    \param[in] num Number of led. 0 - red, 1 - green, 2 - blue, 3 - orange.
  */
 void ml_turn_on_LED(uint8_t num);
 
 /*!
     \brief Turn OFF small led by number
-    \param[in] num Number of led. 1 - red, 2 - green, 3 - blue, 4 - orange.
+    \param[in] num Number of led. 0 - red, 1 - green, 2 - blue, 3 - orange.
  */
 void ml_turn_off_LED(uint8_t num);
 

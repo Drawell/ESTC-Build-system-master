@@ -104,10 +104,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#ad9e5a9cb16c94ca7f10224474b304c7a">init_tim1</a> ()</td></tr>
 <tr class="memdesc:ad9e5a9cb16c94ca7f10224474b304c7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Init tim1 Init timer tim1 as PWM. <br /></td></tr>
 <tr class="separator:ad9e5a9cb16c94ca7f10224474b304c7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08bd539b417ae4a63301dcf463aba39c"><td class="memItemLeft" align="right" valign="top"><a id="a08bd539b417ae4a63301dcf463aba39c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#a08bd539b417ae4a63301dcf463aba39c">init_tim2</a> (void)</td></tr>
+<tr class="memdesc:a08bd539b417ae4a63301dcf463aba39c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Init timer tim2 Init tim2 for mask interrupt for 100 ms. <br /></td></tr>
+<tr class="separator:a08bd539b417ae4a63301dcf463aba39c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae53475ef213445fe7ac4f6a684f0fcae"><td class="memItemLeft" align="right" valign="top"><a id="ae53475ef213445fe7ac4f6a684f0fcae"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#ae53475ef213445fe7ac4f6a684f0fcae">change_intensity</a> (void)</td></tr>
 <tr class="memdesc:ae53475ef213445fe7ac4f6a684f0fcae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Init external interrupt for buttons Init external interrupt for buttons. On EXTI_Line0 - GPIOE Pin 0. On EXTI_Line1 - GPIOE Pin 1. <br /></td></tr>
 <tr class="separator:ae53475ef213445fe7ac4f6a684f0fcae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38ad4725462bdc5e86c4ead4f04b9fc2"><td class="memItemLeft" align="right" valign="top"><a id="a38ad4725462bdc5e86c4ead4f04b9fc2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#a38ad4725462bdc5e86c4ead4f04b9fc2">TIM2_IRQHandler</a> (void)</td></tr>
+<tr class="memdesc:a38ad4725462bdc5e86c4ead4f04b9fc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">tim2 interrupt handler. set mask interrupt flag as 1; <br /></td></tr>
+<tr class="separator:a38ad4725462bdc5e86c4ead4f04b9fc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17e9789a29a87d2df54f12b94dd1a0b6"><td class="memItemLeft" align="right" valign="top"><a id="a17e9789a29a87d2df54f12b94dd1a0b6"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#a17e9789a29a87d2df54f12b94dd1a0b6">EXTI0_IRQHandler</a> (void)</td></tr>
 <tr class="memdesc:a17e9789a29a87d2df54f12b94dd1a0b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Button 0 interrupt handler. Change colour. <br /></td></tr>
@@ -119,20 +127,24 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
+<tr class="memitem:ae82a7163a606b32c747badeb3659a909"><td class="memItemLeft" align="right" valign="top"><a id="ae82a7163a606b32c747badeb3659a909"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#ae82a7163a606b32c747badeb3659a909">mask_flag</a> = 1</td></tr>
+<tr class="memdesc:ae82a7163a606b32c747badeb3659a909"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mask interrupt flag; 0 - mask, 1 - allow interrupt. <br /></td></tr>
+<tr class="separator:ae82a7163a606b32c747badeb3659a909"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b5c44a04cf88f7bade2660ac55c9000"><td class="memItemLeft" align="right" valign="top"><a id="a5b5c44a04cf88f7bade2660ac55c9000"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#a5b5c44a04cf88f7bade2660ac55c9000">current_colour</a> = 1</td></tr>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#a5b5c44a04cf88f7bade2660ac55c9000">current_colour</a> = 0</td></tr>
 <tr class="memdesc:a5b5c44a04cf88f7bade2660ac55c9000"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configured colour; 1 - red, 2 - green, 3 - blue. <br /></td></tr>
 <tr class="separator:a5b5c44a04cf88f7bade2660ac55c9000"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a227a0af69cc93faae4fc383f1c5f3350"><td class="memItemLeft" align="right" valign="top"><a id="a227a0af69cc93faae4fc383f1c5f3350"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#a227a0af69cc93faae4fc383f1c5f3350">colour_red_intensity</a> = 1</td></tr>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#a227a0af69cc93faae4fc383f1c5f3350">colour_red_intensity</a> = 0</td></tr>
 <tr class="memdesc:a227a0af69cc93faae4fc383f1c5f3350"><td class="mdescLeft">&#160;</td><td class="mdescRight">Present intensity of red. <br /></td></tr>
 <tr class="separator:a227a0af69cc93faae4fc383f1c5f3350"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5ce323a02da0a9a5affcead95878677"><td class="memItemLeft" align="right" valign="top"><a id="ac5ce323a02da0a9a5affcead95878677"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#ac5ce323a02da0a9a5affcead95878677">colour_green_intensity</a> = 1</td></tr>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#ac5ce323a02da0a9a5affcead95878677">colour_green_intensity</a> = 0</td></tr>
 <tr class="memdesc:ac5ce323a02da0a9a5affcead95878677"><td class="mdescLeft">&#160;</td><td class="mdescRight">Present intensity of green. <br /></td></tr>
 <tr class="separator:ac5ce323a02da0a9a5affcead95878677"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f16ac2d5d47685aa146a9ccc14b000d"><td class="memItemLeft" align="right" valign="top"><a id="a8f16ac2d5d47685aa146a9ccc14b000d"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#a8f16ac2d5d47685aa146a9ccc14b000d">colour_blue_intensity</a> = 1</td></tr>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8h.html#a8f16ac2d5d47685aa146a9ccc14b000d">colour_blue_intensity</a> = 0</td></tr>
 <tr class="memdesc:a8f16ac2d5d47685aa146a9ccc14b000d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Present intensity of blue. <br /></td></tr>
 <tr class="separator:a8f16ac2d5d47685aa146a9ccc14b000d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
